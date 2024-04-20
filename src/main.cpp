@@ -10,11 +10,12 @@ using namespace std;
 
 // learn how to write classes and functions in C++
 class Task {
-  string command;
-  string schedule;
-  bool active = true;
+public:
+    string command;
+    string schedule; // Schedule as a string for simplicity
+    bool active = true;
 
-  Task(const string& cmd, const string& sch) : command(cmd), schedule(sch) {}
+    Task(const string& cmd, const string& sch) : command(cmd), schedule(sch) {}
 };
 
 class Scheduler {
@@ -34,8 +35,12 @@ public:
     }
 
     void removeTask(int index) {
-        tasks.erase(tasks.begin() + index);
-        cout << "Task removed." << endl;
+        if(index >= 0 && index < tasks.size()) {
+            tasks.erase(tasks.begin() + index);
+            cout << "Task removed." << endl;
+        } else {
+            cout << "Invalid task index." << endl;
+        }
     }
 
     // Placeholder for the actual scheduling mechanism
@@ -49,14 +54,14 @@ public:
     }
 };
 
-// this is the main that shouldn't be touched apart from calling from classes
+// main function which really shouldn't change TOO much
 int main() {
     Scheduler myScheduler;
     myScheduler.addTask(Task("/path/to/backup.sh", "0 0 * * *")); // Every day at midnight
     myScheduler.listTasks();
 
     // Start the scheduler in a background thread
-    std::thread schedulerThread(&Scheduler::runScheduler, &myScheduler);
+    thread schedulerThread(&Scheduler::runScheduler, &myScheduler);
     schedulerThread.join();
 
     return 0;
