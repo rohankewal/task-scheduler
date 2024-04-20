@@ -18,12 +18,12 @@ check_url() {
 # Function to find broken links on a website using wget
 check_links() {
 	echo "Checking for broken links on $1"
-	# --spider: Don't download pages, just check links
-	# -o log.txt: Log output to log.txt file
-	# -r: Recursive
-	# -l 1: Only one level deep from the given URL
 	wget --spider -o log.txt -r -l 1 $1
-	grep -B 2 '404 Not Found' log.txt
+	if [ -f log.txt ]; then
+		grep -B 2 '404 Not Found' log.txt
+	else
+		echo "Log file not created. Check wget command."
+	fi
 }
 
 # Main loop to check each website
